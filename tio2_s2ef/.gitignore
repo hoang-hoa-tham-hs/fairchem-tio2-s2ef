@@ -1,0 +1,15 @@
+.conda/
+
+# data files
+data/raw/*
+data/processed/*
+data/tio2/train/*
+data/tio2/val/*
+*.lmdb
+*.lmdb-lock
+*.pkl
+*.h5
+*.hdf5
+
+__pycache__/
+*.pyc
