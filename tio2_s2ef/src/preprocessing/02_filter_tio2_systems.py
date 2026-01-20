@@ -11,7 +11,7 @@ from tqdm import tqdm
 import json
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from scripts.path_config import DataPath
+from src.path_config import DataPath
 
 def load_metadata():
     """Load OC20 metadata file"""
@@ -43,7 +43,7 @@ def filter_tio2_systems(metadata):
         if 'Ti' in bulk and 'O' in bulk:
             tio2_systems[system_id] = info
     
-    print(f"\n✓ Found {len(tio2_systems):,} TiO2 systems")
+    print(f"\nFound {len(tio2_systems):,} TiO2 systems")
     print(f"  ({len(tio2_systems)/len(metadata)*100:.2f}% of total)")
     
     return tio2_systems
@@ -51,10 +51,6 @@ def filter_tio2_systems(metadata):
 
 def analyze_tio2_systems(tio2_systems):
     """Analyze filtered TiO2 systems"""
-    print("\n" + "=" * 60)
-    print("TiO2 SYSTEM ANALYSIS")
-    print("=" * 60)
-    
     # Collect statistics
     adsorbates = Counter()
     bulks = Counter()
@@ -68,22 +64,7 @@ def analyze_tio2_systems(tio2_systems):
         adsorbates[ads] += 1
         bulks[bulk] += 1
         miller_indices[miller] += 1
-    
-    # Top adsorbates
-    print("\n--- Top 15 Adsorbates ---")
-    for ads, count in adsorbates.most_common(15):
-        print(f"  {ads:20s}: {count:6,} systems")
-    
-    # Top bulk compositions
-    print("\n--- Top 10 Bulk Compositions ---")
-    for bulk, count in bulks.most_common(10):
-        print(f"  {bulk:30s}: {count:6,} systems")
-    
-    # Top Miller indices
-    print("\n--- Top 10 Miller Indices ---")
-    for miller, count in miller_indices.most_common(10):
-        print(f"  {miller:20s}: {count:6,} systems")
-    
+
     # Return stats as dictionary
     return {
         'total_systems': len(tio2_systems),
@@ -105,25 +86,25 @@ def save_results(tio2_systems, stats):
     # Save filtered mapping
     with open(DataPath.TIO2_MAPPING_FILE, 'wb') as f:
         pickle.dump(tio2_systems, f)
-    print(f"\n✓ Saved TiO2 mapping to: {DataPath.TIO2_MAPPING_FILE}")
+    print(f"\nSaved TiO2 mapping to: {DataPath.TIO2_MAPPING_FILE}")
     
     # Save system IDs (one per line)
     with open(DataPath.TIO2_SYSTEM_IDS_FILE, 'w') as f:
         for sid in sorted(tio2_systems.keys()):
             f.write(f"{sid}\n")
-    print(f"✓ Saved {len(tio2_systems):,} system IDs to: {DataPath.TIO2_SYSTEM_IDS_FILE}")
+    print(f"Saved {len(tio2_systems):,} system IDs to: {DataPath.TIO2_SYSTEM_IDS_FILE}")
     
     # Save statistics as JSON
     with open(DataPath.TIO2_STATISTICS_FILE, 'w') as f:
         json.dump(stats, f, indent=2)
-    print(f"✓ Saved statistics to: {DataPath.TIO2_STATISTICS_FILE}")
+    print(f"Saved statistics to: {DataPath.TIO2_STATISTICS_FILE}")
 
-
-def main():
+if __name__ == "__main__":
+    print("\n" + "=" * 60)
+    print("TiO2 SYSTEM ANALYSIS")
+    
     # Load metadata
     metadata = load_metadata()
-    if metadata is None:
-        return
     
     # Filter TiO2 systems
     tio2_systems = filter_tio2_systems(metadata)
@@ -134,10 +115,5 @@ def main():
     # Save results
     save_results(tio2_systems, stats)
     
-    print("\n" + "=" * 60)
     print("Finishing TiO2 System Filtering")
-    print("=" * 60)
-
-
-if __name__ == "__main__":
-    main()
+    print(f"\n{'=' * 60}")

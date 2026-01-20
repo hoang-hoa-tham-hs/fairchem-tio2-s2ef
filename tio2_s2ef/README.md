@@ -15,11 +15,11 @@ conda activate tio2-s2ef
 
 ## Run a few scripts
 ```
-python scripts/preprocessing/01_download_metadata.py
-python scripts/preprocessing/02_filter_tio2_systems.py
-python scripts/preprocessing/03_download_s2ef_data.py
-python scripts/preprocessing/04_create_tio2_lmdb.py
-python scripts/preprocessing/05_compute_statistics.py
+python src/preprocessing/01_download_metadata.py
+python src/preprocessing/02_filter_tio2_systems.py
+python src/preprocessing/03_download_s2ef_data.py
+python src/preprocessing/04_create_tio2_lmdb.py
+python src/preprocessing/05_compute_statistics.py
 ```
 
 ## If you want to update any packages in env.yml

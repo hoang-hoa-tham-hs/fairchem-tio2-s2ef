@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from scripts.path_config import DataPath, DownloadURLs
+from src.path_config import DataPath, DownloadURLs
 
 def download_metadata():
     """Download OC20 data mapping file"""
@@ -43,10 +43,14 @@ def download_metadata():
     except Exception as e:
         print(f"\nError downloading file: {e}")
         sys.exit(1)
-    
-    print("\n" + "=" * 60)
-    print("Finishing OC20 Metadata Download")
-    print("=" * 60)
+
+
 
 if __name__ == "__main__":
+    print("=" * 60)
+    print(f"Download OC20 metadata file")
+
     download_metadata()
+
+    print("Finishing OC20 Metadata Download")
+    print(f"\n{'=' * 60}")
