@@ -22,6 +22,14 @@ python src/preprocessing/04_create_tio2_lmdb.py
 python src/preprocessing/05_compute_statistics.py
 ```
 
+## Use to convert extxyz.txt and xyz.txt into lmdb
+```
+python -m scripts.preprocess_ef --data-path "D:/extxyz.txt_xyz.txt_dir" --out-path "D:/lmdb_dir" --num-workers 8
+```
+```
+python -m scripts.preprocess_ef --data-path "D:/Data44" --out-path "D:/Data44_processed" --num-workers 8
+```
+
 ## If you want to update any packages in env.yml
 ```
 conda env update -f env.yml -n tio2-s2ef

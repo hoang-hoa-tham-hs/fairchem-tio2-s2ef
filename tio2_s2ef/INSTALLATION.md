@@ -30,7 +30,7 @@ conda activate tio2-s2ef
 Install scientific computing and data processing libraries from conda-forge:
 
 ```bash
-conda install -c conda-forge ase python-lmdb numpy scipy pandas matplotlib seaborn tqdm jupyter pyyaml -y
+conda install -c conda-forge ase python-lmdb numpy scipy pandas matplotlib seaborn tqdm jupyter pyyaml wandb numba tensorboard -y
 ```
 
 ---
