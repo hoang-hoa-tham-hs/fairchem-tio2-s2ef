@@ -104,11 +104,13 @@ def sph_harm_prefactor(l_degree, m_order):
 
     """
     # sqrt((2*l+1)/4*pi * (l-m)!/(l+m)! )
+    # Change from numpy to math
+    import math
     return (
-        (2 * l_degree + 1)
-        / (4 * np.pi)
-        * np.math.factorial(l_degree - abs(m_order))
-        / np.math.factorial(l_degree + abs(m_order))
+    (2 * l_degree + 1)
+    / (4 * math.pi)
+    * math.factorial(   l_degree - abs(m_order))
+    / math.factorial(l_degree + abs(m_order))
     ) ** 0.5
 
 
