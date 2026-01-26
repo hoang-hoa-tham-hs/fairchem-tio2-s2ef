@@ -48,9 +48,9 @@ def download_metadata():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print(f"Download OC20 metadata file")
+    print(f"STEP 2: Download OC20 Metadata File")
 
     download_metadata()
 
-    print("Finishing OC20 Metadata Download")
-    print(f"\n{'=' * 60}")
+    print("\nFinishing OC20 Metadata Download")
+    print(f"{'=' * 60}")

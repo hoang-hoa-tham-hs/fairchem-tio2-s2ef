@@ -9,6 +9,10 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 import json
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from src.path_config import DataPath
 
 
 def compute_statistics(lmdb_path):
@@ -85,16 +89,23 @@ def main():
     print("STEP 5: Compute Normalization Statistics")
     print("=" * 60)
     
-    # Find TiO2 training LMDB
-    train_lmdb = Path("data/tio2")
-    lmdb_files = list(train_lmdb.rglob("train*.lmdb"))
+    # Find TiO2 LMDB files
+    lmdb_dirs = [
+        DataPath.TIO2_LMDB_200K_DIR,
+        DataPath.TIO2_LMDB_2M_DIR,
+        DataPath.TIO2_LMDB_20M_DIR,
+        DataPath.TIO2_LMDB_ALL_DIR,
+    ]
+    
+    lmdb_files = []
+    for lmdb_dir in lmdb_dirs:
+        if lmdb_dir.exists():
+            # Find all LMDB files in directory
+            lmdb_files.extend(list(lmdb_dir.glob("*.lmdb")))
     
     if not lmdb_files:
-        # Try alternative path
-        lmdb_files = list(train_lmdb.rglob("data.lmdb"))
-    
-    if not lmdb_files:
-        print(f"\nError: No LMDB files found in {train_lmdb}")
+        print(f"\nError: No LMDB files found in TiO2 LMDB directories")
+        print(f"  Searched in: {DataPath.TIO2_LMDB_DIR}")
         print("  Run 04_create_tio2_lmdb.py first")
         return
     
@@ -139,7 +150,8 @@ def main():
     print(f"  Std:  {combined_stats['force_std']:.6f} eV/Å")
     
     # Save statistics
-    output_path = Path("data/metadata/tio2_normalization_stats.json")
+    output_path = DataPath.TIO2_NORMALIZATION_FILE
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, 'w') as f:
         json.dump(combined_stats, f, indent=2)
     

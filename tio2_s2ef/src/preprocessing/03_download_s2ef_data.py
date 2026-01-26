@@ -13,7 +13,7 @@ from tqdm import tqdm
 # Add parent directories to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from tio2_s2ef.src.path_config import DataPath, DownloadURLs
+from tio2_s2ef.src.path_config import S2EFDataPath, DownloadURLs
 
 
 class DownloadProgressBar(tqdm):
@@ -28,6 +28,8 @@ def download_file(url, output_path):
     """Download file with progress bar"""
     print(f"Downloading to: {output_path}")
     
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
     with DownloadProgressBar(unit='B', unit_scale=True, miniters=1, desc="Downloading") as t:
         urllib.request.urlretrieve(url, output_path, reporthook=t.update_to)
     
@@ -38,6 +40,8 @@ def download_file(url, output_path):
 def extract_tar(tar_path, extract_to):
     """Extract tar file with progress bar"""
     print(f"Extracting: {tar_path.name}")
+    
+    extract_to.mkdir(parents=True, exist_ok=True)
     
     with tarfile.open(tar_path, 'r') as tar:
         members = tar.getmembers()
@@ -72,18 +76,19 @@ def download_and_uncompress_s2ef(split="200k"):
     if response != 'y':
         return
     
-    # Create directories
-    DataPath.RAW_DIR.mkdir(parents=True, exist_ok=True)
-    DataPath.RAW_S2EF_DIR.mkdir(parents=True, exist_ok=True)
+    # Get paths using path_config
+    raw_dir = S2EFDataPath.get_raw_dir(split)
+    uncompressed_dir = S2EFDataPath.get_uncompressed_dir(split)
+    tar_path = S2EFDataPath.get_tar_file(split)
+    url = DownloadURLs.get_s2ef_url(split)
     
-    # Get paths
-    url = DownloadURLs.get_s2ef_url(split, "train")
-    tar_filename = f"s2ef_train_{split.upper()}.tar"
-    tar_path = DataPath.RAW_DIR / tar_filename
+    # Create directories
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    uncompressed_dir.mkdir(parents=True, exist_ok=True)
     
     # Download
     if tar_path.exists():
-        print(f"{tar_filename} exists.")
+        print(f"{tar_path.name} exists.")
         response = input("Re-download? (y/n): ").lower()
         if response == 'y':
             tar_path.unlink()
@@ -91,12 +96,12 @@ def download_and_uncompress_s2ef(split="200k"):
     else:
         download_file(url, tar_path)
     
-    # Extract tar
+    # Extract tar to raw directory
     print("\nExtracting tar file...")
-    extract_tar(tar_path, DataPath.RAW_DIR)
+    extract_tar(tar_path, raw_dir)
     
     # Find compressed directory
-    compressed_base = DataPath.RAW_DIR / f"s2ef_train_{split.upper()}"
+    compressed_base = raw_dir / f"s2ef_train_{split.upper()}"
     compressed_dir = compressed_base / f"s2ef_train_{split.upper()}"
     
     if not compressed_dir.exists():
@@ -114,10 +119,8 @@ def download_and_uncompress_s2ef(split="200k"):
     xz_files = list(compressed_dir.glob("*.xz"))
     print(f"\nFound {len(xz_files)} compressed files in {compressed_dir}")
     
-    # Uncompress
+    # Uncompress to uncompressed_data directory
     print("\nUncompressing data...")
-    uncompressed_dir = DataPath.RAW_S2EF_DIR / split / "train_uncompressed"
-    uncompressed_dir.mkdir(parents=True, exist_ok=True)
     
     # Import here to avoid circular imports
     from scripts.uncompress import main as uncompress_main
@@ -150,13 +153,15 @@ def download_and_uncompress_s2ef(split="200k"):
             shutil.rmtree(compressed_base)
             print(f"Deleted: {compressed_base.name}")
     
-    print(f"\nData location: {uncompressed_dir.absolute()}")
+    print(f"\nRaw data location: {raw_dir.absolute()}")
+    print(f"Uncompressed data location: {uncompressed_dir.absolute()}")
+
 
 if __name__ == "__main__":
     print("=" * 60)
     print(f"STEP 3: Download & Uncompress S2EF Dataset")
 
-    # Chose split to download (https://github.com/facebookresearch/fairchem/blob/main/src/fairchem/core/scripts/download_data.py)
+    # Choose split to download
     print("\nAvailable splits:")
     print("  1. 200k  - ~1.7 GB")
     print("  2. 2M    - ~17 GB")
@@ -170,5 +175,5 @@ if __name__ == "__main__":
     
     download_and_uncompress_s2ef(split)
 
-    print("Download and Uncompress Complete!")
+    print("\nDownload and Uncompress Complete!")
     print(f"{'=' * 60}")

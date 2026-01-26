@@ -22,7 +22,7 @@ def load_metadata():
         print("Run 01_download_metadata.py first")
         return None
     
-    print(f"Loading metadata from: {DataPath.OC20_MAPPING_FILE}")
+    print(f"\nLoading metadata from: {DataPath.OC20_MAPPING_FILE}")
     with open(DataPath.OC20_MAPPING_FILE, 'rb') as f:
         data = pickle.load(f)
     
@@ -101,7 +101,7 @@ def save_results(tio2_systems, stats):
 
 if __name__ == "__main__":
     print("\n" + "=" * 60)
-    print("TiO2 SYSTEM ANALYSIS")
+    print("STEP 2:TiO2 System Analysis")
     
     # Load metadata
     metadata = load_metadata()
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     # Save results
     save_results(tio2_systems, stats)
     
-    print("Finishing TiO2 System Filtering")
-    print(f"\n{'=' * 60}")
+    print("\nFinishing TiO2 System Filtering")
+    print(f"{'=' * 60}")

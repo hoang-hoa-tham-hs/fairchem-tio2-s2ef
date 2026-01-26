@@ -22,6 +22,27 @@ python src/preprocessing/04_create_tio2_lmdb.py
 python src/preprocessing/05_compute_statistics.py
 ```
 
+### Data structure after step 04
+```
+data/
+├── metadata/
+├── raw/
+│   ├── 200k
+│   ├── 2M
+│   ├── 20M
+│   └── all
+├── uncompressed_data/
+│   ├── 200k
+│   ├── 2M
+│   ├── 20M
+│   └── all
+└── tio2_lmddb/
+    ├── 200k
+    ├── 2M
+    ├── 20M
+    └── all
+```
+
 ## Use to convert extxyz.txt and xyz.txt into lmdb
 ```
 python -m scripts.preprocess_ef --data-path "D:/extxyz.txt_xyz.txt_dir" --out-path "D:/lmdb_dir" --num-workers 8
