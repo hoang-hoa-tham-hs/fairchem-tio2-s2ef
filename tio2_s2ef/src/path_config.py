@@ -45,6 +45,7 @@ class DataPath:
     
     # Specific metadata files
     OC20_MAPPING_FILE = METADATA_DIR / "oc20_data_mapping.pkl"
+    OC22_MAPPING_FILE = METADATA_DIR / "oc22_metadata.pkl"
     TIO2_MAPPING_FILE = METADATA_DIR / "tio2_data_mapping.pkl"
     TIO2_SYSTEM_IDS_FILE = METADATA_DIR / "tio2_system_ids.txt"
     TIO2_STATISTICS_FILE = METADATA_DIR / "tio2_statistics.json"
@@ -126,6 +127,7 @@ class DownloadURLs:
     
     # OC20 metadata
     OC20_METADATA_URL = f"{BASE_URL}/oc20_data_mapping.pkl"
+    OC22_METADATA_URL = f"{BASE_URL}/oc22/oc22_metadata.pkl"
     
     # S2EF dataset URLs
     S2EF_URLS = {
