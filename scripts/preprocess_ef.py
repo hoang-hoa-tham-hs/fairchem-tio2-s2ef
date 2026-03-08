@@ -24,7 +24,7 @@ def write_images_to_lmdb(mp_arg):
     a2g, db_path, samples, sampled_ids, idx, pid, args = mp_arg
     db = lmdb.open(
         db_path,
-        map_size=1099511627776 * 2,
+        map_size=1024 * 1024 * 1024 * 10,
         subdir=False,
         meminit=False,
         map_async=True,
