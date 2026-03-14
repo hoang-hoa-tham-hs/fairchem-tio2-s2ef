@@ -247,7 +247,7 @@ class ForcesTrainer(BaseTrainer):
                     self.ema.restore()
                 return predictions
 
-        predictions["forces"] = np.array(predictions["forces"])
+        predictions["forces"] = np.array(predictions["forces"], dtype=object)
         predictions["chunk_idx"] = np.array(predictions["chunk_idx"])
         predictions["energy"] = np.array(predictions["energy"])
         predictions["id"] = np.array(predictions["id"])
@@ -327,7 +327,8 @@ class ForcesTrainer(BaseTrainer):
                 batch = next(train_loader_iter)
 
                 # Forward, loss, backward.
-                with torch.cuda.amp.autocast(enabled=self.scaler is not None):
+                device_type = "cuda" if self.device.type == "cuda" else "cpu"
+                with torch.amp.autocast(device_type=device_type, enabled=self.scaler is not None):
                     out = self._forward(batch)
                     loss = self._compute_loss(out, batch)
                 loss = self.scaler.scale(loss) if self.scaler else loss

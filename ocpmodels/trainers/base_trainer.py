@@ -783,14 +783,14 @@ class BaseTrainer(ABC):
             for k in keys:
                 if k == "forces":
                     gather_results[k] = np.concatenate(
-                        np.array(gather_results[k])[idx]
+                        np.array(gather_results[k], dtype=object)[idx]
                     )
                 elif k == "chunk_idx":
                     gather_results[k] = np.cumsum(
-                        np.array(gather_results[k])[idx]
+                        np.array(gather_results[k], dtype=object)[idx]
                     )[:-1]
                 else:
-                    gather_results[k] = np.array(gather_results[k])[idx]
+                    gather_results[k] = np.array(gather_results[k], dtype=object)[idx]
 
             logging.info(f"Writing results to {full_path}")
             np.savez_compressed(full_path, **gather_results)
