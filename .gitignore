@@ -3,7 +3,7 @@ data
 checkpoints
 results
 logs
-*.traj
+# *.traj
 experimental
 
 # Byte-compiled / optimized / DLL files

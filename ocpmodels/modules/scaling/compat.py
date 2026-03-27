@@ -52,6 +52,8 @@ def _load_scale_dict(scale_file: Optional[Union[str, ScaleDict]]):
 def load_scales_compat(
     module: nn.Module, scale_file: Optional[Union[str, ScaleDict]]
 ):
+    # scale_file = r"D:\Train_thử\fairchem-tio2-s2ef\configs\s2ef\all\gemnet\scaling_factors\gemnet-dT.json"
+    scale_file = r"/content/fairchem-tio2-s2ef/configs/s2ef/all/gemnet/scaling_factors/gemnet-dT.json"
     scale_dict = _load_scale_dict(scale_file)
     if not scale_dict:
         return
